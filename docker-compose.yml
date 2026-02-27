@@ -9,6 +9,7 @@ services:
     environment:
       DATABASE_URL: file:/app/data/dev.db
       BASE_URL: http://localhost:3000
+    command: sh -c "npx prisma migrate deploy && node dist/server.js"
     ports:
       - "3000:3000"
     volumes:
