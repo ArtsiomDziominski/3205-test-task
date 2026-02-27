@@ -2,6 +2,10 @@
 
 Production-style fullstack monorepo for URL shortening with metadata preview extraction.
 
+## UI Preview
+
+![URL Shortener UI](./assets/preview.png)
+
 ## Project Structure
 
 ```text
