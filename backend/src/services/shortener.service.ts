@@ -17,6 +17,15 @@ export class ShortenerService {
     const existing = await this.urlRepository.findByOriginalUrl(normalizedUrl);
 
     if (existing) {
+      if (this.isPreviewMissing(existing.title, existing.description, existing.image)) {
+        const refreshedPreview = await this.metadataService.getPreview(normalizedUrl);
+
+        if (this.hasPreviewData(refreshedPreview)) {
+          const updated = await this.urlRepository.updatePreview(existing.id, refreshedPreview);
+          return this.toResponse(updated.id, updated.title, updated.description, updated.image, updated.visits);
+        }
+      }
+
       return this.toResponse(existing.id, existing.title, existing.description, existing.image, existing.visits);
     }
 
@@ -57,5 +66,13 @@ export class ShortenerService {
       preview,
       visits
     };
+  }
+
+  private isPreviewMissing(title: string | null, description: string | null, image: string | null): boolean {
+    return !title && !description && !image;
+  }
+
+  private hasPreviewData(preview: UrlPreview): boolean {
+    return Boolean(preview.title || preview.description || preview.image);
   }
 }

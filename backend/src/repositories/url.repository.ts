@@ -14,6 +14,20 @@ export class UrlRepository {
     return prisma.shortUrl.create({ data });
   }
 
+  updatePreview(
+    id: string,
+    preview: { title: string | null; description: string | null; image: string | null }
+  ): Promise<ShortUrl> {
+    return prisma.shortUrl.update({
+      where: { id },
+      data: {
+        title: preview.title,
+        description: preview.description,
+        image: preview.image
+      }
+    });
+  }
+
   incrementVisits(id: string): Promise<ShortUrl> {
     return prisma.shortUrl.update({
       where: { id },
